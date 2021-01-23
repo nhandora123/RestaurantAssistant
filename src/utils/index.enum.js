@@ -1,7 +1,7 @@
-const AccountEnum = require("./Account.util")
+const {ErrorUtil, SuccessUtil} = require("./response.util")
 
 
-let paramNotEnough = new AccountEnum(-1, "PARAM_NOT_ENOUGH", "Tham số không đúng");
+let paramNotEnough = new ErrorUtil(201,-1, "Tham số không đúng");
 
 
 const Enum = {

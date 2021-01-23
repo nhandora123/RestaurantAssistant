@@ -1,11 +1,11 @@
-const base = require('../base.controller')
+const Base = require('../../services/base.service')
 const Area = require('../../models/Table/area.model')
 
 
-exports.getAllArea = base.getAll(Area);
+exports.getAllArea = Base.getAll(Area);
 
-exports.createOneArea = base.createOne(Area);
+exports.createOneArea = Base.createOne(Area);
 
-exports.deleteOneAre = base.deleteOne(Area);
+exports.deleteOneAre = Base.deleteOne(Area);
 
-exports.updateOne = base.updateOne(Area);
+exports.updateOne = Base.updateOne(Area);

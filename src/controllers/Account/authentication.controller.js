@@ -2,6 +2,7 @@ require('dotenv').config();
 const User = require('../../models/Account/user.model');
 const jwt = require('jsonwebtoken')
 const Enum = require('../../utils/index.enum')
+const {ErrorUtil, SuccessUtil} = require('../../utils/response.util.js')
 
 const signIn = (passport) => function (req, res, next) {
 
@@ -11,7 +12,8 @@ const signIn = (passport) => function (req, res, next) {
 
         passport.authenticate('signIn', function (err, user, info) {
 
-            if (!user) { return res.status(401).json(err) }//Don't exist this username
+            console.log(user);
+            if (!user) { return res.status(401).json(new ErrorUtil(201, -1, "Your account or password is wrong")) }//Don't exist this username
         
             req.logIn(user, function (err) {
                 if (err) { return next(err); }
@@ -22,14 +24,12 @@ const signIn = (passport) => function (req, res, next) {
                     fullname: user.fullname,
                     //picture: user.picture
                 };
-
                 let token = jwt.sign(payLoad, process.env.ACCESS_TOKEN_SECRET);
-                return res.json({ status: 1, token: token });// Success
-
+                return res.json(new SuccessUtil(200, 1, "Success", token));// Success
             });
         })(req, res, next);
     } else {
-        return res.json({status: -1})
+        return res.json(new ErrorUtil(201, -1, "Less Attribute"))
     }
 }
 

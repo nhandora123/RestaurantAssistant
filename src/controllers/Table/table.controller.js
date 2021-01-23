@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Table = require('../../models/Table/table.model')
 const TypeTable = require('../../models/Table/typeTable.model')
-const Base = require('../base.controller')
+const Base = require('../../services/base.service')
 //const APIFeatures = require('../../utils/Feature.util');
 
 
@@ -40,7 +40,7 @@ exports.createManyTable = async (req, res, next) => {
                 } else {
                     codeRandomTypeTableRandom = "BL4N"
                 }
-                
+                status = status == 0 ? 1 : 0;
                 doc.push(await Table.create({
                     tableName: "BA" + index.toString(),
                     typeTableId: (await TypeTable.findOne({codeTypeTable: codeRandomTypeTableRandom}))._id,
@@ -62,4 +62,3 @@ exports.createManyTable = async (req, res, next) => {
         next(error);
     }
 }
-

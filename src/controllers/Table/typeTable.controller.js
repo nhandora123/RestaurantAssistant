@@ -1,5 +1,5 @@
-const base = require('../base.controller');
+const Base = require('../../services/base.service')
 const TypeTable = require('../../models/Table/typeTable.model');
 
-exports.createOneTypeTable = base.createOne(TypeTable);
+exports.createOneTypeTable = Base.createOne(TypeTable);
 

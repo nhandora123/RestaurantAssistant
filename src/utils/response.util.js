@@ -6,15 +6,17 @@ class ErrorUtil {
         this.data = null;
     }
 }
-class AppSuccess {
-    constructor(statusCode, status, data) {
+
+class SuccessUtil {
+    constructor(statusCode, status, message, data){
         this.statusCode = statusCode;
         this.status = status;
-        this.message = null;
+        this.message = message;
         this.data = data
     }
 }
+
 module.exports = {
     ErrorUtil,
-    AppSuccess
+    SuccessUtil
 };

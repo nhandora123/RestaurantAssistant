@@ -1,4 +1,7 @@
-const { ErrorUtil, AppSuccess } = require('../utils/Error.util');
+const {
+    ErrorUtil,
+    SuccessUtil
+} = require('../utils/response.util');
 const APIFeatures = require('../utils/Feature.util');
 
 exports.deleteOne = Model => async () => {
@@ -8,8 +11,7 @@ exports.deleteOne = Model => async () => {
         if (!doc) {
             return new ErrorUtil(404, 'fail', 'No document found with that id');
         }
-
-        return{
+        return {
             status: 'success',
             data: null
         };
@@ -29,7 +31,7 @@ exports.updateOne = Model => async (req, res, next) => {
             return new ErrorUtil(404, 'fail', 'No document found with that id');
         }
 
-        return{
+        return {
             status: 'success',
             data: {
                 doc
@@ -45,7 +47,7 @@ exports.createOne = Model => async (req, res, next) => {
     try {
         const doc = await Model.create(req.body);
 
-        return{
+        return {
             status: 'success',
             data: {
                 doc
@@ -53,7 +55,7 @@ exports.createOne = Model => async (req, res, next) => {
         };
 
     } catch (error) {
-        return new AppError(404, 'fail', error);
+        return new ErrorUtil(404, 'fail', error);
     }
 };
 
@@ -65,7 +67,7 @@ exports.getOne = Model => async (req, res, next) => {
             return new ErrorUtil(404, 'fail', 'No document found with that id');
         }
 
-        return{
+        return {
             status: 'success',
             data: {
                 doc
@@ -76,22 +78,37 @@ exports.getOne = Model => async (req, res, next) => {
     }
 };
 
-exports.getAll = async (Model, queryString) => {
-    try {
-        const features = new APIFeatures(Model.find(), queryString)
+exports.getAll = (Model, queryString) => async (req, res, next) => {
+        try {
+            queryString = {
+                ...queryString,
+                order: req.query.order,
+                page: req.query.page,
+                limit: req.query.limit
+            }
+            const features = new APIFeatures(Model.find(), queryString)
+            .condition()
             .sort()
-            .paginate();
+            .populate()
+            
+            const totalData = await features.query;
+            const data = await features.paginate().query;
 
-        const doc = await features.query;
+            if (!data) {
+                res.json(new ErrorUtil(404, 'fail', 'No document found with that id'));
+            }
+            res.json(new SuccessUtil(200, 1, 'success', {
+                totalRow: totalData.length,
+                page: queryString.page * 1 || 1,
+                limit: queryString.limit * 1 || 10,
+                data
+            }))
+            //return 1//SuccessUtil(200, 1, 'success', {
+            //     results: doc.length,
+            //     data: doc
+            // });
 
-        //console.log(doc)
-
-        return new AppSuccess(200, 'success', {
-            results: doc.length,
-            data: doc
-        });
-
-    } catch (error) {
-        return new ErrorUtil(404, 'fail', error);
+        } catch (error) {
+            res.json(new ErrorUtil(404, 'fail', error));
+        }
     }
-};

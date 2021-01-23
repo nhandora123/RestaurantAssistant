@@ -12,23 +12,22 @@ const authentication = require('./src/routes/Account/authentication.route')
 const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
 
-
 connectDB();
 
 const app = express();
 
 const PORT = process.env.PORT || 1035;
-// // //Setting other
-// // app.use(helmet());
+// //Setting other
+// app.use(helmet());
 
-// // app.use(morgan('combined'));
-// // app.use(cors())
-// // ////////////////////////////////////////////
+// app.use(morgan('combined'));
+// app.use(cors())
+// ////////////////////////////////////////////
 
-// //Setting return req and res
-// app.use(express.urlencoded({ extended: false }));
-// app.use(express.json());
-// ///////////////////////////////////////////
+//Setting return req and res
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+///////////////////////////////////////////
 
 //Setting midleware view ejs
 app.set("view engine", "ejs");

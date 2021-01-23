@@ -19,13 +19,12 @@ const signIn = (passport) => {
                     if (!user) {
                         return done({status: 0}, false)
                     }
-                    console.log(user);
 
                     if (!isValidPassword(user, password)) {
                         return done({status: -2}, false);
                     }
                     
-                    UserProfile.findOne({ UserId: user._id }, (errr, userProfile)=>{
+                    UserProfile.findOne({ UserId: user._id }, (err, userProfile)=>{
                         if (err) return done(err);
 
                         return done(null, user);
